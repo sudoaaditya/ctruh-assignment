@@ -23,6 +23,7 @@ export default class World extends EventEmitter {
 
         this.experience.on("objectAdded", this.objectAdded);
         this.experience.on("objectSelected", this.onObjectSelected);
+        this.experience.on("updateSelectionBox", this.onUpdateSelectionBox);
     }
 
     setUpTransformControls = () => {
@@ -163,6 +164,18 @@ export default class World extends EventEmitter {
         }
 
     }
+
+    onUpdateSelectionBox = (object) => {
+        if (object && this.transformControls.object === object) {
+            this.selectionBox.visible = false;
+            this.box.setFromObject(object);
+            if (this.box.isEmpty() === false) {
+                this.selectionBox.setFromObject(object);
+                this.selectionBox.visible = true;
+            }
+        }
+    }
+
 
     transformModeChanged = (mode) => {
         if (mode !== this.transformMode) {

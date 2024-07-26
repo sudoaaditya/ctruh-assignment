@@ -2,7 +2,8 @@ import { useDispatch, useSelector } from "react-redux"
 import ModelUploader from "./modeluploader";
 import { useEffect, useRef, useState } from "react";
 
-import { Edit, Loader } from 'react-feather';
+import { Loader } from 'react-feather';
+import { isEqual } from "lodash";
 
 import ThreeExperience from './experience/Experience';
 import TransformButtons from "./ui/TransformModes";
@@ -11,9 +12,8 @@ import Sidebar from "./ui/sidebar/Sidebar";
 import {
   setModelMesh, setSelectedMesh,
   setScale, setPosition,
-  setRotation,
+  setRotation, setModel,
 } from "../features/experienceSlice";
-import { isEqual } from "lodash";
 
 function App() {
   const dispatch = useDispatch();
@@ -71,6 +71,14 @@ function App() {
     }
   }
 
+  const contentLoadFailed = () => {
+    setLoader(false);
+    setIsModelLoaded(false);
+    dispatch(setModelMesh(null));
+    dispatch(setModel(null))
+    alert("Failed to parse the model, please choose another model!")
+  }
+
   const selectMesh = (mesh) => {
     setSelected(mesh);
     dispatch(setSelectedMesh(mesh));
@@ -101,7 +109,8 @@ function App() {
       {
         onContentLoaded: showCanvasContentLoaded,
         onSelectMesh: selectMesh,
-        onUpdateMesh: updateMesh
+        onUpdateMesh: updateMesh,
+        onContentLoadFailed: contentLoadFailed
       }
     );
   }

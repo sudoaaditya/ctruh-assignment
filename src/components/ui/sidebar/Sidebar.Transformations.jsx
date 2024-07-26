@@ -3,6 +3,7 @@ import InputGroup from "./input-group";
 import { useEffect, useRef, useState } from "react";
 import { isEqual } from "lodash";
 import { setPosition, setRotation, setScale } from "../../../features/experienceSlice";
+import { MathUtils } from "three";
 
 
 const SceneTransformations = () => {
@@ -67,9 +68,11 @@ const SceneTransformations = () => {
             />
             <InputGroup
                 type="rotation"
-                defValue={{ x: rotation.x, y: rotation.y, z: rotation.z }}
+                defValue={{ x: rotation.x * MathUtils.RAD2DEG, y: rotation.y * MathUtils.RAD2DEG, z: rotation.z * MathUtils.RAD2DEG }}
                 callback={handleRotationChange}
                 key={key.current * Math.random()}
+                rangeMin={-360}
+                rangeMax={360}
             />
             <InputGroup
                 type="scale"

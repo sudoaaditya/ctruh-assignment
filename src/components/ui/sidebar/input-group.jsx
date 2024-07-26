@@ -1,7 +1,7 @@
 import { useRef } from "react"
-import { Euler, Vector3 } from "three";
+import { Euler, MathUtils, Vector3 } from "three";
 
-const InputGroup = ({ type, defValue, callback }) => {
+const InputGroup = ({ type, defValue, callback, rangeMin, rangeMax }) => {
 
     const formRef = useRef(null);
     const refX = useRef(null);
@@ -12,14 +12,14 @@ const InputGroup = ({ type, defValue, callback }) => {
         if (type === "position" || type === "scale") {
             callback(new Vector3(Number(refX.current.value), Number(refY.current.value), Number(refZ.current.value)))
         } else if (type === "rotation") {
-            callback(new Euler(Number(refX.current.value), Number(refY.current.value), Number(refZ.current.value)))
+            callback(new Euler(Number(refX.current.value) * MathUtils.DEG2RAD, Number(refY.current.value) * MathUtils.DEG2RAD, Number(refZ.current.value) * MathUtils.DEG2RAD))
         }
     }
 
     return (
         <div style={{ marginTop: "10px" }}>
             <div className="sidebar__inputHeader">{type}</div>
-            <form ref={formRef} onChange={handleFormChange} key={type} className="sidebar__inputRow">
+            <form ref={formRef} key={type} className="sidebar__inputRow">
                 <div className="sidebar__numberCont">
                     <label htmlFor={`${type}X`}>X</label>
                     <input
@@ -28,6 +28,10 @@ const InputGroup = ({ type, defValue, callback }) => {
                         ref={refX}
                         defaultValue={defValue.x}
                         step={0.1}
+                        min={rangeMin || Infinity}
+                        max={rangeMax || Infinity}
+                        onKeyDown={(e) => e.key === 'Enter' && handleFormChange()}
+                        onBlur={() => handleFormChange()}
                     />
                 </div>
 
@@ -39,6 +43,10 @@ const InputGroup = ({ type, defValue, callback }) => {
                         ref={refY}
                         defaultValue={defValue.y}
                         step={0.1}
+                        min={rangeMin || Infinity}
+                        max={rangeMax || Infinity}
+                        onKeyDown={(e) => e.key === 'Enter' && handleFormChange()}
+                        onBlur={() => handleFormChange()}
                     />
                 </div>
 
@@ -51,6 +59,10 @@ const InputGroup = ({ type, defValue, callback }) => {
                         ref={refZ}
                         defaultValue={defValue.z}
                         step={0.1}
+                        min={rangeMin || Infinity}
+                        max={rangeMax || Infinity}
+                        onKeyDown={(e) => e.key === 'Enter' && handleFormChange()}
+                        onBlur={() => handleFormChange()}
                     />
                 </div>
 

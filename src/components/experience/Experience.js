@@ -38,6 +38,7 @@ export default class Experience extends EventEmitter {
         this.sizes.on("resize", this.resize);
         this.time.on("tick", this.update);
         this.resources.on("ready", this.makeHTMLVisible);
+        this.resources.on("resourceFailed", this.onResourceError)
         this.on("objectChanged", this.objectChanged);
 
         // global instance
@@ -102,6 +103,10 @@ export default class Experience extends EventEmitter {
         this.callbacks.onContentLoaded(true, object);
     }
 
+    onResourceError = () => {
+        this.callbacks.onContentLoadFailed();
+    }
+
     initResourceLoading = (model) => {
         if (!this.contentLoaded) {
             this.resources.loadModel(model);
@@ -121,6 +126,7 @@ export default class Experience extends EventEmitter {
             this.selectedObject.position.copy(position);
             this.selectedObject.rotation.copy(rotation);
             this.selectedObject.scale.copy(scale);
+            this.trigger("updateSelectionBox", [this.selectedObject]);
         }
     }
 

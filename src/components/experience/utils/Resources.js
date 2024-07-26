@@ -1,9 +1,8 @@
-import * as THREE from 'three';
-import { GLTFLoader } from "three/examples/jsm/Addons.js";
+
+import { DRACOLoader, GLTFLoader } from "three/examples/jsm/Addons.js";
 import Experience from "../Experience";
 import EventEmitter from "./EventEmitter";
 import Model from "../objects/Model";
-import { has } from 'lodash';
 
 class ObjectLoader extends EventEmitter {
     constructor() {
@@ -12,7 +11,10 @@ class ObjectLoader extends EventEmitter {
 
         this.items = {};
 
+        const dracoLoader = new DRACOLoader();
+        dracoLoader.setDecoderPath('/draco/')
         this.gltfLoader = new GLTFLoader();
+        this.gltfLoader.setDRACOLoader(dracoLoader)
         this.fileReader = new FileReader();
     }
 
@@ -30,7 +32,7 @@ class ObjectLoader extends EventEmitter {
                 this.items[name] = model;
                 this.experience.addObjects(model.mesh);
                 this.trigger("ready", [model.mesh]);
-            })
+            }, () => this.trigger("resourceFailed"))
 
         });
         this.fileReader.readAsArrayBuffer(file);

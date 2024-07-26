@@ -1,7 +1,6 @@
 import * as THREE from 'three';
 import Experience from "../Experience";
 
-
 export default class Model {
     constructor(modelProps) {
         this.experience = new Experience();
