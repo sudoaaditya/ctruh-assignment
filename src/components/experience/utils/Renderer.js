@@ -15,7 +15,6 @@ export default class Renderer {
     }
 
     initInstance = () => {
-        const scope = this;
         this.instance = new THREE.WebGLRenderer({
             antialias: this.sizes.pixelRatio > 1 ? false : true,
             canvas: this.canvas,

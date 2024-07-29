@@ -70,7 +70,7 @@ export default class Experience extends EventEmitter {
 
         this.scene.remove(object);
 
-        this.trigger("objectRemoved", [object, delayAutosave, isVersionSwitch]);
+        this.trigger("objectRemoved", [object]);
     };
 
     objectChanged = (object, operation, oldValue) => {
